@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-between">
+  <h2 mat-dialog-title>Datos del curso</h2>
+  <button mat-icon-button matTooltip="Cerrar" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-spinner style="position: absolute; top: 45%; left: 45%; z-index: 3;" *ngIf="loading"></mat-spinner>
+<mat-dialog-content class="mat-typography" id="contentForm">
+  <form class="row g-3" [formGroup]="cursoForm" enctype="multipart/form-data" (ngSubmit)="isValid()">
+
+    <div class="d-flex justify-content-between">
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" cdkFocusInitial required>
+      </mat-form-field>
+
+      <div style="width: 15rem;">
+        <b>Inscripción: </b>
+        <mat-slide-toggle color="primary" formControlName="habilita_inscripcion" (change)="enableIns()">{{cursoForm.get('habilita_inscripcion')?.value? 'Habilitada' : 'Deshabilitada'}}</mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <mat-form-field>
+        <mat-label>Subrubro *</mat-label>
+        <mat-select formControlName="subrubro" aria-required="true">
+          <mat-option *ngFor="let subrubro of subrubros" [value]="subrubro.id_subrubros">{{subrubro.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div style="width: 15rem;">
+        <b>Estado del curso: </b>
+        <mat-slide-toggle color="primary" formControlName="estado_publicacion" (change)="enableState()">{{cursoForm.get('estado_publicacion')?.value? 'Publicado' : 'No Publicado'}}</mat-slide-toggle>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-form-field>
+      <mat-label>Descripción del curso</mat-label>
+      <textarea matInput formControlName="descripcion" required></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4" floatLabel="always">
+      <mat-label>Precio Inscripción</mat-label>
+      <input matInput type="number" style="text-align: right;" formControlName="precio_inscripcion" placeholder="0" required>
+      <span matPrefix>$&nbsp;</span>
+      <span matSuffix>.00</span>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4" floatLabel="always">
+      <mat-label>Precio Cuota</mat-label>
+      <input matInput type="number" style="text-align: right;" formControlName="precio_cuota" placeholder="0" required>
+      <span matPrefix>$&nbsp;</span>
+      <span matSuffix>.00</span>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+      <mat-label>Cantidad de cuotas</mat-label>
+      <input matInput type="number" formControlName="cantidad_cuotas" placeholder="1" required>
+    </mat-form-field>
+
+    <div class="col-md-6 d-flex flex-column">
+      <label for="formImage" class="form-label">Imagen de presentación</label>
+      <img [src]="base64" alt="image" id="formImage">
+    </div>
+
+    <div class="col-md-6 d-flex flex-column">
+      <label for="formVideo" class="form-label">Video de presentación</label>
+      <iframe src="" height="315" id="formVideo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <div class="col-md-6 mt-3">
+      <input type="file" class="form-control" accept="image/*" formControlName="url_imagen_presentacion" (change)="readThis($event)" required>
+    </div>
+
+    <mat-form-field class="col-md-6 mt-3">
+      <mat-label>Link al video de presentación</mat-label>
+      <input matInput type="text" placeholder="http://www.example.com/" formControlName="url_video_presentacion" [(ngModel)]="linkVideo" required>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+      <mat-label>¿A quién va dirigido?</mat-label>
+      <input matInput type="text" formControlName="publico_destinado" required>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+      <mat-label>Requisitos</mat-label>
+      <input matInput type="text" formControlName="requisitos" required>
+    </mat-form-field>
+
+    <mat-divider></mat-divider>
+
+    <h3 class="col-md-6 mt-3">Comisiones Habilitadas</h3>
+    <div class="col-md-6 mt-3">
+      <button mat-raised-button class="float-end" type="button" color='accent'>Nueva Comisión</button>
+    </div>
+
+    <button mat-raised-button class="col-auto mx-auto mt-3" type="submit" color="primary">Registrar curso</button>
+  </form>
+</mat-dialog-content>
