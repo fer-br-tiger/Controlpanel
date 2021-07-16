@@ -14,6 +14,9 @@ export class FormcursoComponent implements OnInit {
   linkVideo: string = '';
   base64: any = 'https://i.ibb.co/NLs907N/no-image.jpg';
   loading: boolean = false;
+  saveFormCom: boolean = false;
+  comForm!: FormGroup;
+  comisiones: any;
   private change: boolean = false;
 
   constructor(private instructorService: InstructorService, private formBuilder: FormBuilder, private dialogRef: MatDialogRef<FormcursoComponent>, @Inject(MAT_DIALOG_DATA) private id: number) {
@@ -32,25 +35,33 @@ export class FormcursoComponent implements OnInit {
       habilita_inscripcion: [0, Validators.required]
     });
 
+    this.comForm = formBuilder.group({
+      nombreCo: ['', Validators.required],
+      descripcionCo: '',
+      horario_dias: ['', Validators.required],
+      cupo: ['', Validators.required]
+    });
+
     instructorService.getSubrubros().subscribe(resp => {
       this.subrubros = resp.rows;
     });
 
     if (id) {
       instructorService.getCurso(id).subscribe(resp => {
-        this.cursoForm.get('nombre')?.setValue(resp[0].nombre);
-        this.cursoForm.get('descripcion')?.setValue(resp[0].descripcion);
-        this.cursoForm.get('publico_destinado')?.setValue(resp[0].publico_destinado);
-        this.cursoForm.get('requisitos')?.setValue(resp[0].requisitos);
-        this.base64 = resp[0].url_imagen_presentacion;
-        this.cursoForm.get('url_imagen_presentacion')?.setValue(resp[0].url_imagen_presentacion, { emitModelToViewChange: false });
-        this.cursoForm.get('url_video_presentacion')?.setValue(resp[0].url_video_presentacion);
-        this.cursoForm.get('precio_inscripcion')?.setValue(resp[0].precio_inscripcion);
-        this.cursoForm.get('precio_cuota')?.setValue(resp[0].precio_cuota);
-        this.cursoForm.get('cantidad_cuotas')?.setValue(resp[0].cantidad_cuotas);
-        this.cursoForm.get('subrubro')?.setValue(resp[0].id_subrubros);
-        this.cursoForm.get('estado_publicacion')?.setValue(resp[0].estado_publicacion);
-        this.cursoForm.get('habilita_inscripcion')?.setValue(resp[0].habilita_inscripcion);
+        this.cursoForm.get('nombre')?.setValue(resp.curso.nombre);
+        this.cursoForm.get('descripcion')?.setValue(resp.curso.descripcion);
+        this.cursoForm.get('publico_destinado')?.setValue(resp.curso.publico_destinado);
+        this.cursoForm.get('requisitos')?.setValue(resp.curso.requisitos);
+        this.base64 = resp.curso.url_imagen_presentacion;
+        this.cursoForm.get('url_imagen_presentacion')?.setValue(resp.curso.url_imagen_presentacion, { emitModelToViewChange: false });
+        this.cursoForm.get('url_video_presentacion')?.setValue(resp.curso.url_video_presentacion);
+        this.cursoForm.get('precio_inscripcion')?.setValue(resp.curso.precio_inscripcion);
+        this.cursoForm.get('precio_cuota')?.setValue(resp.curso.precio_cuota);
+        this.cursoForm.get('cantidad_cuotas')?.setValue(resp.curso.cantidad_cuotas);
+        this.cursoForm.get('subrubro')?.setValue(resp.curso.id_subrubros);
+        this.cursoForm.get('estado_publicacion')?.setValue(resp.curso.estado_publicacion);
+        this.cursoForm.get('habilita_inscripcion')?.setValue(resp.curso.habilita_inscripcion);
+        this.comisiones = resp.curso.comisiones;
       });
     }
   }
@@ -139,6 +150,21 @@ export class FormcursoComponent implements OnInit {
 
   enableState() {
     (this.cursoForm.get('estado_publicacion')?.value) ? this.cursoForm.get('estado_publicacion')?.setValue(1) : this.cursoForm.get('estado_publicacion')?.setValue(0);
+  }
+
+  async saveCom() {
+    if (this.comForm.valid) {
+      let com = {
+        nombre: this.comForm.controls.nombreCo.value,
+        descripcion: this.comForm.controls.descripcionCo.value,
+        horario_dias: this.comForm.controls.horario_dias.value,
+        id_cursos: this.id,
+        cupo: this.comForm.controls.cupo.value
+      };
+
+      await this.instructorService.postCom(com).toPromise().then();
+      this.saveFormCom = !this.saveFormCom;
+    }
   }
 
 }

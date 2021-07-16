@@ -40,7 +40,7 @@
                     <button mat-icon-button color="primary" (click)="openFormEdit(row.id_cursos)" matTooltip="Editar" matTooltipPosition="above">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn" matTooltip="Eliminar" matTooltipPosition="above">
+                    <button mat-icon-button color="warn" (click)="openConfirmDelete(row)" matTooltip="Eliminar" matTooltipPosition="above">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>

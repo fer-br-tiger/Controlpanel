@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from "@angular/material/table";
@@ -56,6 +56,10 @@ export class CursosComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
         this.myToast.show();
+        this.instructorService.getCursos().subscribe(resp => {
+          this.dataSource.data = resp.rows;
+          this.dataSource._updateChangeSubscription();
+        });
       }
     });
   }
@@ -66,8 +70,34 @@ export class CursosComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
         this.myToast.show();
+        this.instructorService.getCursos().subscribe(resp => {
+          this.dataSource.data = resp.rows;
+          this.dataSource._updateChangeSubscription();
+        });
+      }
+    });
+  }
+  
+  openConfirmDelete(row: any) {
+    const dialogRef = this.dialog.open(ConfirmDialog, {data: row.nombre});
+
+    dialogRef.afterClosed().subscribe(async res => {
+      if (res) {
+        await this.instructorService.deleteCurso(row.id_cursos).toPromise().then();
+        this.instructorService.getCursos().subscribe(resp => {
+          this.dataSource.data = resp.rows;
+          this.dataSource._updateChangeSubscription();
+        });
       }
     });
   }
 
+}
+
+@Component({
+  selector: 'confirm-dialog',
+  templateUrl: 'confirm-dialog.html'
+})
+export class ConfirmDialog {
+  constructor(@Inject (MAT_DIALOG_DATA) public data: string) {}
 }

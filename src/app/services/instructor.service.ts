@@ -20,10 +20,13 @@ export class InstructorService {
   private apiGetCursos = this.urlBase + '/admin/cursos';
   private apiPostCurso = this.urlBase + '/cursos';
   private apiPutCurso = this.urlBase + '/cursos/';
+  private apiDeleteCurso = this.urlBase + '/cursos/';
 
   private apiGetAlumnos = this.urlBase + '/alumnos';
 
   private apiGetSubrubros = this.urlBase + '/subrubros';
+
+  private apiPostComision = this.urlBase + '/comision';
 
   private apiKey: string = 'c91a482fb08aff508e2c04b9ad7fed9a';
 
@@ -76,9 +79,18 @@ export class InstructorService {
     return this.http.post<any[]>(this.apiPostCurso, newSession, cudOptions);
   }
 
+  postCom(com: any): Observable<any> {
+    const newSession = Object.assign({}, com);
+    return this.http.post<any[]>(this.apiPostComision, newSession, cudOptions);
+  }
+
   putCurso(curso: any, id: number): Observable<any> {
     const newSession = Object.assign({}, curso);
     return this.http.put<any[]>(this.apiPutCurso + id, newSession, cudOptions);
+  }
+
+  deleteCurso(id: number): Observable<any> {
+    return this.http.delete(this.apiDeleteCurso + id);
   }
 
   getSubrubros(): Observable<any> {

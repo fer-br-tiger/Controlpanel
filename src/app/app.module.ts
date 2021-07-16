@@ -14,7 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { CursosComponent } from './components/cursos/cursos.component';
+import { ConfirmDialog, CursosComponent } from './components/cursos/cursos.component';
 import { AlumnosComponent } from './components/alumnos/alumnos.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
@@ -29,6 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MatCardModule } from "@angular/material/card";
     MainpanelComponent,
     CursosComponent,
     AlumnosComponent,
-    FormcursoComponent
+    FormcursoComponent,
+    ConfirmDialog
   ],
   imports: [
     BrowserModule,
@@ -64,7 +66,8 @@ import { MatCardModule } from "@angular/material/card";
     MatSelectModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
